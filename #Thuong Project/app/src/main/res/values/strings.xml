@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="username">Username</string>
+    <string-array name="spinnerItems">
+        <item>Ho Chi Minh</item>
+        <item>Ha Noi</item>
+        <item>Da Ning</item>
+        <item>Can Tho</item>
+    </string-array>
+    <string name="first_name"> First Name</string>
+    <string name="last_name"> Last Name</string>
+</resources>
