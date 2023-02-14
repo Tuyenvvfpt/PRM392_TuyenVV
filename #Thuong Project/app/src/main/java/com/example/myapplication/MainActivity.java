@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         spinnerCampus = findViewById(R.id.spinner);
-        final String[] addressArray = {"Ha Noi", "Ho Chi Minh", "Can Tho", "Da Nano"};
+        final String[] addressArray = {"Ha Noi", "Ho Chi Minh", "Can Tho", "Nam Dinh"};
         ArrayAdapter<String> adapter =
 //                new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, addressArray);
                 new ArrayAdapter<>(this, R.layout.my_dropdown_list, addressArray);
