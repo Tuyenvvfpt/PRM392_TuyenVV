@@ -25,6 +25,11 @@
         android:title="Request location"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/menu_send_notify"
+        android:icon="@drawable/ic_action_account"
+        android:title="Send notify location"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/menu_logout"
         android:icon="@drawable/ic_action_logout"
         android:title="Logout"

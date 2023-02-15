@@ -8,10 +8,15 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -166,10 +171,41 @@ public class ProfileDetailActivity extends AppCompatActivity {
                     requestLocation();
                 }
                 return true;
-
+            case R.id.menu_send_notify:
+                sendNotification();
+                return true;
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    //15022023 second send notify
+    private final String CHANEL_ID = "001";
+
+    private void sendNotification() {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANEL_ID)
+                .setSmallIcon(R.drawable.ic_action_setting)
+                .setContentTitle("Demo Notification")
+                .setContentText("here we go kk....");
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.0){
+//
+//        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel =
+                    new NotificationChannel(CHANEL_ID, "Demo Notification Channel", NotificationManager.IMPORTANCE_HIGH);
+            notificationManager.createNotificationChannel(channel);
+        } else {
+            builder.setPriority(NotificationCompat.PRIORITY_HIGH);
+        }
+        //third
+        //add activity to handle action when user tap on notification
+        Intent intent = new Intent(this, NotificationHandleActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        builder.setContentIntent(pendingIntent);
+        //send notification
+        notificationManager.notify(2, builder.build());
+
     }
 
     private void showFavourite() {
@@ -222,7 +258,7 @@ public class ProfileDetailActivity extends AppCompatActivity {
     }
 
 
-    //15022023
+    //15022023 first request location
     private final int REQUEST_LOCATION = 2;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -244,6 +280,23 @@ public class ProfileDetailActivity extends AppCompatActivity {
 
                 }
             }
+
+            //cua Luong
+//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
+//                AlertDialog.Builder builder = new AlertDialog.Builder(this)
+//                        .setTitle("reason for request Location")
+//                        .setMessage("Please grant permission to access location service")
+//                        .setCancelable(false)
+//                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//
+//                            }
+//                        });
+//
+//            }
+            //
             requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
                     Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
         }
