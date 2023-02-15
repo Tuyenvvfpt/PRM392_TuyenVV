@@ -69,14 +69,20 @@ public class MainActivity extends AppCompatActivity {
                 role = "Staff";
             }
         });
+
+        //get address information
         spinnerCampus = findViewById(R.id.spinner);
         final String[] addressArray = {"Ha Noi", "Ho Chi Minh", "Can Tho", "Nam Dinh"};
         ArrayAdapter<String> adapter =
 //                new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, addressArray);
+
                 new ArrayAdapter<>(this, R.layout.my_dropdown_list, addressArray);
+        //                                 context-layout display-source string
+
 //                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         adapter.setDropDownViewResource(R.layout.my_dropdown_list);
         spinnerCampus.setAdapter(adapter);
+
         spinnerCampus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -86,10 +92,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-//
+//nếu như không có gì được chọn
             }
         });
-
     }
 
     @Override
@@ -116,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onListWord(View view) {
+
         Intent intent = new Intent(this, WordListActivity.class);
     }
 

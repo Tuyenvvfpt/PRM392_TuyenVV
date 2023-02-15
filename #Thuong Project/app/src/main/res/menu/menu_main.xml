@@ -20,6 +20,11 @@
         android:title="Account"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/menu_request_location"
+        android:icon="@drawable/ic_action_account"
+        android:title="Request location"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/menu_logout"
         android:icon="@drawable/ic_action_logout"
         android:title="Logout"

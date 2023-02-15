@@ -4,12 +4,19 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -18,6 +25,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myapplication.bean.UserInfo;
 import com.example.myapplication.common.IntentKey;
@@ -28,7 +36,7 @@ public class ProfileDetailActivity extends AppCompatActivity {
     private TextView tvFirstName, tvLastName, tvAddress;
     private UserInfo userInfo;
 
-    //03022023
+    //03022023 ???
     //define a object of ActivityResultLauncher which is used to start an activity for get data back
     private ActivityResultLauncher<Intent> startActivity = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
@@ -52,7 +60,6 @@ public class ProfileDetailActivity extends AppCompatActivity {
         tvFirstName = findViewById(R.id.tvFirstName);
         tvLastName = findViewById(R.id.tvLastName);
         tvAddress = findViewById(R.id.tvAddress);
-
     }
 
     @Override
@@ -61,13 +68,13 @@ public class ProfileDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile_detail);
         //findViewById
         initView();
-//10022023
+        //10022023 them avatar
         ImageView imageViewAvatar = findViewById(R.id.imageView);
         String imageURL = "https://cdn-icons-png.flaticon.com/512/147/147144.png";
         Picasso.with(this).load(imageURL).placeholder(R.drawable.lei).error(R.drawable.lei).into(imageViewAvatar);
 
 
-        //first day
+        //first day. get du lieu tu id
         userInfo = getUserInfo();
         tvFirstName.setText(userInfo.getFirstName());
         tvLastName.setText(userInfo.getLastName());
@@ -96,6 +103,18 @@ public class ProfileDetailActivity extends AppCompatActivity {
         //10022023 after
         //Register context menu for firstname textview
         registerForContextMenu(tvFirstName);
+    }
+
+    private UserInfo getUserInfo() {
+        userInfo = new UserInfo();
+        Intent intent = getIntent();
+        if (intent != null) {
+            userInfo.setUserName(intent.getStringExtra(IntentKey.USERNAME));
+            userInfo.setFirstName("Tuyen");
+            userInfo.setLastName("Vu");
+            userInfo.setAddress("Nam Dinh Province");
+        }
+        return userInfo;
     }
 
     //and Register context menu for firstname textview
@@ -142,6 +161,11 @@ public class ProfileDetailActivity extends AppCompatActivity {
             case R.id.menu_favourite:
                 showFavourite();
                 return true;
+            case R.id.menu_request_location:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestLocation();
+                }
+                return true;
 
 
         }
@@ -181,18 +205,6 @@ public class ProfileDetailActivity extends AppCompatActivity {
 //        }
 //    }
 
-    private UserInfo getUserInfo() {
-        userInfo = new UserInfo();
-        Intent intent = getIntent();
-        if (intent != null) {
-            userInfo.setUserName(intent.getStringExtra(IntentKey.USERNAME));
-            userInfo.setFirstName("Tuyen");
-            userInfo.setLastName("Vu");
-            userInfo.setAddress("Nam Dinh");
-        }
-        return userInfo;
-    }
-
 
 //    @Override
 //    protected void onStart() {
@@ -207,5 +219,48 @@ public class ProfileDetailActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         userInfo = null;
+    }
+
+
+    //15022023
+    private final int REQUEST_LOCATION = 2;
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void requestLocation() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                            .setTitle("reason for request permission")
+                            .setMessage("pls grant permission to access location service")
+                            .setCancelable(false)
+                            .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //handle action when user clock OK button
+                                }
+                            });
+
+                }
+            }
+            requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_LOCATION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "Location service is granted", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Location service is NOT granted", Toast.LENGTH_SHORT).show();
+
+                }
+                break;
+        }
     }
 }
