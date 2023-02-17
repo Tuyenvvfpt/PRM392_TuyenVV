@@ -122,6 +122,7 @@ public class ProfileDetailActivity extends AppCompatActivity {
         return userInfo;
     }
 
+    //options  menu
     //and Register context menu for firstname textview
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -186,7 +187,7 @@ public class ProfileDetailActivity extends AppCompatActivity {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANEL_ID)
                 .setSmallIcon(R.drawable.ic_action_setting)
                 .setContentTitle("Demo Notification")
-                .setContentText("here we go kk....");
+                .setContentText("Mình làm người yêu nhé anh Tuyên <3");
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.0){
 //
@@ -280,23 +281,6 @@ public class ProfileDetailActivity extends AppCompatActivity {
 
                 }
             }
-
-            //cua Luong
-//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
-//                AlertDialog.Builder builder = new AlertDialog.Builder(this)
-//                        .setTitle("reason for request Location")
-//                        .setMessage("Please grant permission to access location service")
-//                        .setCancelable(false)
-//                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//
-//                            }
-//                        });
-//
-//            }
-            //
             requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
                     Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
         }
