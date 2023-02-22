@@ -12,6 +12,8 @@ import com.example.myapplication.entity.Word;
 public abstract class WordRoomDatabase extends RoomDatabase {
     public abstract WordDAO wordDAO();
 
+//    private  WordRoomDatabase INSTANCE;
+
     private static WordRoomDatabase INSTANCE;
 
     public static WordRoomDatabase getDatabase(Context context) {
