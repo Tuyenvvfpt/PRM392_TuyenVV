@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //22022023 b2
         databaseHelper = new DatabaseHelper(getApplicationContext());
         TextView textViewRegister = findViewById(R.id.tv_register);
         textViewRegister.setOnClickListener(new View.OnClickListener() {
@@ -80,13 +81,13 @@ public class MainActivity extends AppCompatActivity {
                 String password = editPassword.getText().toString();
                 if (username.length() > 0 && password.length() > 0) {
                     SharedPreferences sharedPreferences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
-                    //22022023  b2
+                    //22022023  b3
                     UserInfo userInfo = databaseHelper.select(username);
 
                     //String storedUsername = sharedPreferences.getString(IntentKey.USERNAME, null);
                     //String storedPassword = sharedPreferences.getString(IntentKey.PASSWORD, null);
 
-                    //22022023 b3
+                    //22022023 b4
                     // dieu kien if truoc khi cmt: username.equalsIgnoreCase(storedUsername) && password.equalsIgnoreCase(storedPassword)
                     if (userInfo != null && password.equalsIgnoreCase(userInfo.getPassword())) {
                         sharedPreferences.edit().putBoolean("REMEMBER", checkboxRemember.isChecked()).commit();
