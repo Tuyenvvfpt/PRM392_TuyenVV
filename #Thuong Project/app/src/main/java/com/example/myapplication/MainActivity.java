@@ -16,9 +16,12 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.myapplication.bean.UserInfo;
 import com.example.myapplication.common.IntentKey;
+import com.example.myapplication.dao.DatabaseHelper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,10 +34,23 @@ public class MainActivity extends AppCompatActivity {
     private boolean remember;
     private Spinner spinnerCampus;
 
+    //22022023 b1
+    private DatabaseHelper databaseHelper = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        databaseHelper = new DatabaseHelper(getApplicationContext());
+        TextView textViewRegister = findViewById(R.id.tv_register);
+        textViewRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, RegisterUserActivity.class);
+                startActivity(intent);
+            }
+        });
         //login = findViewById(R.id.buttonLogin);
         //0802023
         login = findViewById(R.id.btWordList);
@@ -64,12 +80,16 @@ public class MainActivity extends AppCompatActivity {
                 String password = editPassword.getText().toString();
                 if (username.length() > 0 && password.length() > 0) {
                     SharedPreferences sharedPreferences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
-                    String storedUsername = sharedPreferences.getString(IntentKey.USERNAME, null);
-                    String storedPassword = sharedPreferences.getString(IntentKey.PASSWORD, null);
-                    if (username.equalsIgnoreCase(storedUsername) && password.equalsIgnoreCase(storedPassword)) {
-                        sharedPreferences.edit()
-                                .putBoolean("REMEMBER", checkboxRemember.isChecked()).commit();
+                    //22022023  b2
+                    UserInfo userInfo = databaseHelper.select(username);
 
+                    //String storedUsername = sharedPreferences.getString(IntentKey.USERNAME, null);
+                    //String storedPassword = sharedPreferences.getString(IntentKey.PASSWORD, null);
+
+                    //22022023 b3
+                    // dieu kien if truoc khi cmt: username.equalsIgnoreCase(storedUsername) && password.equalsIgnoreCase(storedPassword)
+                    if (userInfo != null && password.equalsIgnoreCase(userInfo.getPassword())) {
+                        sharedPreferences.edit().putBoolean("REMEMBER", checkboxRemember.isChecked()).commit();
                         Intent intent = new Intent(MainActivity.this, ProfileDetailActivity.class);
                         intent.putExtra(IntentKey.USERNAME, username);
                         intent.putExtra(IntentKey.PASSWORD, password);
@@ -203,8 +223,7 @@ public class MainActivity extends AppCompatActivity {
             String storedUsername = sharedPreferences.getString(IntentKey.USERNAME, null);
             String storedPassword = sharedPreferences.getString(IntentKey.PASSWORD, null);
             if (username.equalsIgnoreCase(storedUsername) && password.equalsIgnoreCase(storedPassword)) {
-                sharedPreferences.edit()
-                        .putBoolean("REMEMBER", checkboxRemember.isChecked()).commit();
+                sharedPreferences.edit().putBoolean("REMEMBER", checkboxRemember.isChecked()).commit();
 
                 Intent intent = new Intent(MainActivity.this, ProfileDetailActivity.class);
                 intent.putExtra(IntentKey.USERNAME, username);
