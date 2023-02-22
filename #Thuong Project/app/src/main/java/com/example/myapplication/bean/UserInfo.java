@@ -6,7 +6,7 @@ public class UserInfo {
     private String firstName, lastName;
     private String address;
 
-    //
+    //22022023
     private String role;
     private String campus;
     //
